@@ -1,0 +1,6 @@
+{
+  "kmsServer": <KeyControl HostName/IP Address>
+  "certFile" : <SSL certificate file for KMS Plugin>
+  "caCertFile" : <CA certificate to verify KeyControl>
+  "keyId" : <KeyID name for envelope encryption>
+}
