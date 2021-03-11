@@ -6,6 +6,7 @@ This module allows  to use KeyControl as a Key Management Service(KMS) provider 
 
  * Kubernetes cluster version 1.10.0 or later
  * KeyControl version 5.1 or later
+ * Golang must be installed on the server you want to build the plugin. Running the plugin doesn't require Golang. 
 
 ## Building KeyControl KMSPlugin
 
