@@ -20,7 +20,8 @@ import (
     "google.golang.org/grpc"
     "golang.org/x/net/context"
     "golang.org/x/net/trace"
-    k8spb "src/v1beta1"
+    k8spb "k8s.io/apiserver/pkg/storage/value/encrypt/envelope/v1beta1"
+//    k8spb "src/v1beta1"
 )
 
 const (
