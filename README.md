@@ -81,7 +81,6 @@ Certificate bundle downloaded from KeyControl needs to be unpacked before it can
         - kms:
             name: KeyControlKmsPlugin
             endpoint: unix:///etc/kubernetes/kmsplugin.sock
-            cachesize: 100
             timeout: 3s
         - identity: {}
      ```
