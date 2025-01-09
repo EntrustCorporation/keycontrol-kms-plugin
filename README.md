@@ -79,6 +79,7 @@ Certificate bundle downloaded from KeyControl needs to be unpacked before it can
         - secrets
         providers:
         - kms:
+            apiVersion: v2
             name: KeyControlKmsPlugin
             endpoint: unix:///etc/kubernetes/kmsplugin.sock
             timeout: 3s
