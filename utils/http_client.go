@@ -6,9 +6,9 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"kms-plugin/models"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -51,30 +51,30 @@ func (c *KeyControlKmsHttpClient) doRequest(url string, jsonData map[string]stri
 
 	jsonVal, err := json.Marshal(jsonData)
 	if err != nil {
-		log.Fatal(err)
-		return nil, err
+		Logger.Error(err)
+		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonVal))
 	if err != nil {
-		log.Fatal(err)
-		return nil, err
+		Logger.Error(err)
+		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	r, err := c.client.Do(req)
 	if err != nil {
-		log.Fatal(err)
-		return nil, err
+		Logger.Error(err)
+		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 	defer r.Body.Close()
 
 	if r.StatusCode != 200 {
-		return nil, errors.New("request failed")
+		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", errors.New("request failed"))
 	}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 	return body, nil
 }
@@ -108,14 +108,14 @@ func (c *KeyControlKmsHttpClient) Decrypt(ciphertext string) (string, error) {
 	decryptUrl := "https://" + c.config.KmsServer + "/api/1.0/symm_keyid/op/decrypt/"
 	res, err := c.doRequest(decryptUrl, jsonData)
 	if err != nil {
-		log.Fatal(err)
-		return "", err
+		Logger.Error(err)
+		return "", fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 
 	var data models.DecResponse
 	err = json.Unmarshal(res, &data)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to process request in provided kms, detail : %s", err)
 	}
 
 	return data.PlainText, nil
