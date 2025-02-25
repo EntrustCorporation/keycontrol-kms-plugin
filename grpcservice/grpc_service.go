@@ -92,7 +92,7 @@ func (s *GRPCService) Status(ctx context.Context, _ *kmsapi.StatusRequest) (*kms
 		utils.Logger.Error("error occured on status request", err)
 		return nil, err
 	}
-
+	utils.Logger.Info("status request completed", "Version", res.Version, "Healthz", res.Healthz, "KeyID", res.KeyID)
 	return &kmsapi.StatusResponse{
 		Version: res.Version,
 		Healthz: res.Healthz,

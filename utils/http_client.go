@@ -37,6 +37,7 @@ func NewKeyControlKmsHttpClient(config *models.Config) (*KeyControlKmsHttpClient
 			TLSClientConfig: &tls.Config{
 				Renegotiation: tls.RenegotiateOnceAsClient,
 				RootCAs:       caCertPool,
+				MaxVersion:    tls.VersionTLS12,
 				Certificates:  []tls.Certificate{cert},
 			},
 		},
@@ -52,13 +53,13 @@ func (c *KeyControlKmsHttpClient) doRequest(url string, jsonData map[string]stri
 	jsonVal, err := json.Marshal(jsonData)
 	if err != nil {
 		Logger.Error(err)
-		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
+		return nil, fmt.Errorf("failed to marshal request body, detail : %s", err)
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonVal))
 	if err != nil {
 		Logger.Error(err)
-		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
+		return nil, fmt.Errorf("failed to create http request with provided details, detail : %s", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
@@ -70,11 +71,18 @@ func (c *KeyControlKmsHttpClient) doRequest(url string, jsonData map[string]stri
 	defer r.Body.Close()
 
 	if r.StatusCode != 200 {
+		body, readErr := io.ReadAll(r.Body)
+		Logger.Info("Status Code", r.StatusCode)
+		if readErr != nil {
+			Logger.Error("Error while reading the response", readErr.Error())
+		}
+		Logger.Info("Faield to process the request, response body received: ", string(body))
 		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", errors.New("request failed"))
 	}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to process request in provided kms, detail : %s", err)
+		Logger.Error("Error while reading the response body", err.Error())
+		return nil, fmt.Errorf("failed to read the response body, detail : %s", err)
 	}
 	return body, nil
 }
