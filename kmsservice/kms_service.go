@@ -45,11 +45,17 @@ func (s *KeyControlKmsService) Encrypt(ctx context.Context, uid string, data []b
 }
 
 func (s *KeyControlKmsService) Decrypt(ctx context.Context, uid string, req *models.DecryptRequest) ([]byte, error) {
-	sDec := base64.StdEncoding.EncodeToString(req.Ciphertext)
-	res, err := s.client.Decrypt(sDec)
+	ciphertextStr := string(req.Ciphertext) // Convert bytes to string
+	res, err := s.client.Decrypt(ciphertextStr)
 	if err != nil {
 		utils.Logger.Error(err)
 		return nil, err
 	}
-	return []byte(res), nil
+
+	decodedRes, err := base64.StdEncoding.DecodeString(res)
+	if err != nil {
+		utils.Logger.Error("Base64 decoding error:", err)
+		return nil, err
+	}
+	return []byte(decodedRes), nil
 }
