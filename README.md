@@ -8,6 +8,19 @@ This module allows  to use KeyControl as a Key Management Service(KMS) provider 
  * KeyControl version 5.1 or later
  * Golang must be installed on the server you want to build the plugin. Running the plugin doesn't require Golang. 
 
+## **Important: Enable TLS 1.2 in KeyControl Vault for Compatibility**
+
+If you are using **Entrust KeyControl Vault version 10.4.x**, you must enable **TLS 1.2** for compatibility with the KMS plugin, as TLS 1.3 is not supported.
+
+### **Steps to Enable TLS 1.2:**
+1. **Log in** to the KeyControl web interface.
+2. Navigate to **Appliance Management > TLS Configuration > Protocol**.
+3. Select **TLSv1.2, TLSv1.3** (instead of "TLSv1.3 only").
+4. Click **Apply** to save the changes.
+
+For reference, see the attached screenshot.
+![alt text](image.png)
+
 ## Building KeyControl KMSPlugin
 
 1. Clone this repo and cd into keycontrol-kms-plugin
@@ -96,3 +109,4 @@ Certificate bundle downloaded from KeyControl needs to be unpacked before it can
 ## Verifying if plugin is configured correctly
 
 Create a new secret and check KeyControl Audit logs to see encryption logs.
+
