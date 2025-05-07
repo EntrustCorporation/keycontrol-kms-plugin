@@ -1,6 +1,6 @@
 # KeyControl KMSPlugin for Kubernetes
 
-This module allows  to use KeyControl as a Key Management Service(KMS) provider for encrypting Kubernetes secrets.
+The KeyControl KMS Plugin v2.0 implements the Kubernetes KMS API v2 specification, enabling secure envelope encryption for Kubernetes storage data including secrets using Entrust KeyControl as the key management backend.
 
 ## Prerequisites
 
@@ -39,11 +39,12 @@ The above command builds kms-plugin binaries for Linux(kms-plugin-server), Mac(k
 
 KeyControl KMS Plugin uses KeyIDs for envelope encryption.
 
-1. Install and setup KeyControl (version 5.1 or later)
-2. Create a Cloud VM Set on KeyControl WebGUI
-3. Create a KeyID under Cloud VM Set. Note that KeyControl only supports 256 bit KeyID for envelope encryption. So select AES-256 as Algorithm while
+1. Install and setup KeyControl
+2. Create and Login into VM Encryption Vault (only on version 10.1 or later)
+3. Create a Cloud VM Set on KeyControl WebGUI
+4. Create a KeyID under Cloud VM Set. Note that KeyControl only supports 256 bit KeyID for envelope encryption. So select AES-256 as Algorithm while
    creating KeyID.
-4. Create and download a client certificate bundle to be used in KMS Plugin for authentication.
+5. Create and download a client certificate bundle to be used in KMS Plugin for authentication.
 
 ## KMS Plugin Configuration
 
